@@ -68,7 +68,7 @@ if __name__ == "__main__":
     transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307), (0.3081))])
 
     dataset = {}
-    with FileLock("/data/.cache/pytorch.lock"):
+    with FileLock("/data/pytorch.lock"):
         dataset["train"] = datasets.MNIST(scratch_dir, train = True, download = True, transform = transform)
         dataset["test"] = datasets.MNIST(scratch_dir, train = False, download = True, transform = transform)
 
