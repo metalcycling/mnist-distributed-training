@@ -14,6 +14,7 @@ import torch.distributed as dist
 
 from torchvision import transforms
 from torchvision import datasets
+from filelock import FileLock
 
 # %% Model definition
 
@@ -67,8 +68,9 @@ if __name__ == "__main__":
     transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307), (0.3081))])
 
     dataset = {}
-    dataset["train"] = datasets.MNIST(scratch_dir, train = True, download = True, transform = transform)
-    dataset["test"] = datasets.MNIST(scratch_dir, train = False, download = True, transform = transform)
+    with FileLock("/data/pytorch.lock"):
+        dataset["train"] = datasets.MNIST(scratch_dir, train = True, download = True, transform = transform)
+        dataset["test"] = datasets.MNIST(scratch_dir, train = False, download = True, transform = transform)
 
     total_samples = { "train": len(dataset["train"]), "test": len(dataset["test"]) }
 
